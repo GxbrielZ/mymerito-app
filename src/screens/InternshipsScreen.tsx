@@ -53,7 +53,7 @@ export default function InternshipsScreen() {
           
           <View style={styles.placeDetailRow}>
             <Icon name="clock" size={13} color={colors.muted} />
-            <Text style={[styles.placeDetailText, { color: colors.muted }]}>01.03–30.09.2026</Text>
+            <Text style={[styles.placeDetailText, { color: colors.muted }]}>01.03-30.09.2026</Text>
           </View>
         </View>
       </Card>

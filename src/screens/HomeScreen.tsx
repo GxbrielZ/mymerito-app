@@ -6,9 +6,9 @@ import Icon from "../components/Icon";
 import { useTheme } from "../theme/ThemeContext";
 
 const initialNotifications = [
-  { id: 1, type: "chart", title: "Nowa ocena", desc: "Zaawansowane proj. aplikacji mobilnych — 4,5", read: false },
+  { id: 1, type: "chart", title: "Nowa ocena", desc: "Zaawansowane proj. aplikacji mobilnych - 4,5", read: false },
   { id: 2, type: "pin", title: "Zmiana sali", desc: "Projekt wdrożeniowy: B112 → B205 (sobota)", read: false },
-  { id: 3, type: "calendar", title: "Ważny termin", desc: "Oddanie projektu końcowego — 28 września", read: false },
+  { id: 3, type: "calendar", title: "Ważny termin", desc: "Oddanie projektu końcowego - 28 września", read: false },
 ];
 
 export default function HomeScreen() {
