@@ -9,6 +9,9 @@ import HomeScreen from "./src/screens/HomeScreen";
 import Header from "./src/components/Header";
 import BottomNav from "./src/components/BottomNav";
 import Drawer from "./src/components/Drawer";
+import ChatPanel from "./src/components/ChatPanel"; // Importujemy panel czatu
+import Button from "./src/components/Button"; // Importujemy Button do FAB
+import Icon from "./src/components/Icon"; // Importujemy Icon do FAB
 import GradesScreen from "./src/screens/GradesScreen";
 import PaymentsScreen from "./src/screens/PaymentsScreen";
 import CalendarScreen from "./src/screens/CalendarScreen";
@@ -32,13 +35,14 @@ const titles: Partial<Record<Screen, string>> = {
   profile: "Konto",
 };
 
-// Funkcja zawierająca całą logikę nawigacji i ekranów
 function AppContent() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [currentScreen, setCurrentScreen] = useState<Screen>("home");
   const [drawerOpen, setDrawerOpen] = useState(false);
+  
+  // Dodajemy stan do obsługi widoczności czatu
+  const [chatOpen, setChatOpen] = useState(false);
 
-  // Pobieramy informacje o motywie
   const { colors, isDark } = useTheme();
 
   if (!loggedIn) {
@@ -50,7 +54,6 @@ function AppContent() {
     );
   }
 
-  // Mechanizm przełączania widoków
   const renderScreen = () => {
     switch (currentScreen) {
       case "home": return <HomeScreen />;
@@ -74,13 +77,9 @@ function AppContent() {
 
   return (
     <SafeAreaProvider>
-      {/* Dynamiczny pasek powiadomień */}
       <StatusBar style={isDark ? "light" : "dark"} />
       
-      {/* Tło otaczające aplikację korzysta z colors.appBg */}
       <View style={[styles.appContainer, { backgroundColor: colors.appBg }]}>
-        
-        {/* Tło główne aplikacji korzysta z colors.bg */}
         <View style={[styles.mobileShell, { backgroundColor: colors.bg }]}>
           <Header
             title={titles[currentScreen]}
@@ -92,6 +91,15 @@ function AppContent() {
           </View>
 
           <BottomNav screen={currentScreen} setScreen={setCurrentScreen} />
+          
+          {/* Pływający przycisk (FAB) otwierający czat */}
+          <Button 
+            style={[styles.fab, { backgroundColor: colors.blue }]} 
+            onPress={() => setChatOpen(true)}
+          >
+            <Icon name="chat" color="#ffffff" size={24} />
+          </Button>
+
           <Drawer 
             open={drawerOpen} 
             onClose={() => setDrawerOpen(false)} 
@@ -99,9 +107,14 @@ function AppContent() {
             logout={() => { 
               setLoggedIn(false); 
               setDrawerOpen(false); 
+              setChatOpen(false); // Zamykamy czat przy wylogowaniu
               setCurrentScreen("home"); 
             }} 
           />
+
+          {/* Nakładka czatu */}
+          <ChatPanel open={chatOpen} onClose={() => setChatOpen(false)} />
+
         </View>
       </View>
     </SafeAreaProvider>
@@ -119,15 +132,28 @@ export default function App() {
 const styles = StyleSheet.create({
   appContainer: {
     flex: 1,
-    // Usunięto alignItems: "center", dzięki czemu kontener naturalnie wypełnia ekran
   },
   mobileShell: {
     flex: 1,
     width: "100%",
-    // Usunięto maxWidth: 470, co pozwala aplikacji rozciągnąć się od krawędzi do krawędzi
     overflow: "hidden",
   },
   content: {
     flex: 1,
+  },
+  fab: {
+    position: "absolute",
+    bottom: 90, // Wysokość nad dolnym paskiem nawigacji
+    right: 20,
+    width: 58,
+    height: 58,
+    borderRadius: 29,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#2146c7",
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.35,
+    shadowRadius: 12,
+    elevation: 8, // Dodaje cień na Androidzie
   },
 });
